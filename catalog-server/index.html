@@ -8,36 +8,73 @@
         #desserts {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px; /* Отступы между товарами */
+            gap: 10px;
         }
         .product {
-            width: 450px;
             border: 2px solid red;
             padding: 10px;
-            margin: 10px;
             border-radius: 5px;
-
+            width: 200px;
+            text-align: center;
+        }
+        .buttons {
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: rgb(238, 74, 74);
+            border-radius: 5px;
+            border-color:rgb(255, 74, 74) ;
+            color: rgb(255, 255, 255);
+            padding: 10px;
+            margin-right: 5px;
+            cursor: pointer;
         }
     </style>
-    
 </head>
 <body>
     <h1>Каталог товаров</h1>
+    <div class="buttons">
+        <button onclick="filterProducts('Десерты')">Десерт</button>
+        <button onclick="filterProducts('Шоколад')">Шоколад</button>
+        <button onclick="filterProducts('Все')">Все</button>
+    </div>
     <div id="desserts"></div>
-    
+
     <script>
-        fetch('/desserts')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('desserts');
-                data.forEach(product => {
-                    const div = document.createElement('div');
-                    div.classList.add('product');
-                    div.innerHTML = `<h3>${product.name}</h3><p>Цена: ${product.price} ₽</p><p>${product.description}</p><p>Категория: ${product.categories} </p>`;
-                    container.appendChild(div);
+        let allProducts = [];
+
+        function fetchProducts() {
+            fetch('/desserts')
+                .then(response => response.json())
+                .then(data => {
+                    allProducts = data;
+                    renderProducts(allProducts);
                 });
+        }
+
+        function renderProducts(products) {
+            const container = document.getElementById('desserts');
+            container.innerHTML = ''; // Очищаем список
+            products.forEach(product => {
+                const div = document.createElement('div');
+                div.classList.add('product');
+                div.innerHTML = `<h3>${product.name}</h3>
+                                 <p>Цена: ${product.price} ₽</p>
+                                 <p>${product.description}</p>`;
+                container.appendChild(div);
             });
+        }
+
+        function filterProducts(category) {
+            if (category === 'Все') {
+                renderProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(product => product.categories.includes(category));
+                renderProducts(filtered);
+            }
+        }
+
+        fetchProducts();
     </script>
-    
 </body>
 </html>
