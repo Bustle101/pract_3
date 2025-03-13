@@ -4,7 +4,7 @@
 ### **1. Клонирование репозитория**
 Сначала необходимо клонировать репозиторий на ваш локальный компьютер:
 ```sh
-git clone https://github.com/Bustle101/pract_3
+git clone https://github.com/Bustle101/pract_3.git
 cd online-store
 ```
 ### **2. Установка зависимостей**
